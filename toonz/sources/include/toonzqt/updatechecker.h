@@ -7,11 +7,7 @@
 #include <QObject>
 #include "tcommon.h"
 
-#if QT_VERSION >= 0x050000
 #include <QNetworkAccessManager>
-#else
-#include <QHttp>
-#endif
 #include <QUrl>
 #include <QString>
 #include <QDate>
@@ -27,11 +23,7 @@
 #endif
 
 class DVAPI UpdateChecker
-#if QT_VERSION < 0x050000
-	: public QHttp
-#else
 	: public QObject
-#endif
 {
 	Q_OBJECT
 	bool m_httpRequestAborted;
@@ -48,13 +40,7 @@ public:
 
 protected slots:
 	void httpRequestStarted(int requestId) {}
-#if QT_VERSION >= 0x050000
 	void httpRequestFinished(QNetworkReply *);
-#else
-	void httpRequestFinished(int requestId, bool error);
-	void readyReadExec(const QHttpResponseHeader &head) {}
-	void readResponseHeader(const QHttpResponseHeader &responseHeader);
-#endif
 	void slotAuthenticationRequired(const QString &hostName, quint16, QAuthenticator *authenticator);
 	void httpStateChanged(int state);
 };
